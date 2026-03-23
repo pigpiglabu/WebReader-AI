@@ -15,7 +15,7 @@ export function App() {
   const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
   const { models, draft, setDraft, saveModel, editModel, testModel, testState } = useModelConfig();
   const { roles, draft: roleDraft, setDraft: setRoleDraft, saveRole } = useRoleConfig();
-  const { siteConfigs, draft: siteDraft, setDraft: setSiteDraft, saveRule } = useSiteRules();
+  const { siteConfigs, draft: siteDraft, setDraft: setSiteDraft, saveRule, editRule } = useSiteRules();
 
   const modelOptions = useMemo<ModelConfig[]>(() => models, [models]);
 
@@ -65,21 +65,21 @@ export function App() {
         {activeTab === 'models' && (
           <div className="wr-grid wr-grid--two">
             <ModelForm draft={draft} providers={['OpenAI', 'Qwen', 'Anthropic', 'Ollama', 'Custom']} onChange={setDraft} onSave={saveModel} onTest={testModel} testState={testState} />
-            <ModelList models={models} onEdit={editModel} />
+            <ModelList models={models} selectedId={draft.modelId} onEdit={editModel} />
           </div>
         )}
 
         {activeTab === 'roles' && (
           <div className="wr-grid wr-grid--two">
             <RoleForm draft={roleDraft} onChange={setRoleDraft} onSave={saveRole} />
-            <RoleList roles={roles} onEdit={setRoleDraft} />
+            <RoleList roles={roles} selectedId={roleDraft.roleId} onEdit={setRoleDraft} />
           </div>
         )}
 
         {activeTab === 'siteRules' && (
           <div className="wr-grid wr-grid--two">
             <SiteRuleForm draft={siteDraft} roles={roles} models={modelOptions} onChange={setSiteDraft} onSave={saveRule} />
-            <SiteRuleList siteConfigs={siteConfigs} />
+            <SiteRuleList siteConfigs={siteConfigs} selectedId={siteDraft.siteId} onEdit={editRule} />
           </div>
         )}
 

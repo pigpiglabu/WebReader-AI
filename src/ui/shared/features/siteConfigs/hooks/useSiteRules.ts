@@ -24,6 +24,8 @@ export const useSiteRules = () => {
     });
   }, [getSync]);
 
+  const editRule = (rule: SiteConfig) => setDraft(rule);
+
   const saveRule = async () => {
     const nextRule = { ...draft, siteId: draft.siteId || uuidv4() };
     const nextRules = siteConfigs.some((rule) => rule.siteId === nextRule.siteId)
@@ -34,5 +36,5 @@ export const useSiteRules = () => {
     setDraft(defaultRule);
   };
 
-  return { siteConfigs, draft, setDraft, saveRule };
+  return { siteConfigs, draft, setDraft, saveRule, editRule };
 };

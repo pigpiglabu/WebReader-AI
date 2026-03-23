@@ -101,6 +101,24 @@ select {
   background: #fff;
 }
 
+
+.wr-card--interactive {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.wr-card--interactive:hover {
+  border-color: #813efb;
+  box-shadow: 0 10px 24px rgba(129, 62, 251, 0.12);
+}
+
+.wr-card--active {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.12);
+}
+
 .wr-chip {
   display: inline-flex;
   align-items: center;

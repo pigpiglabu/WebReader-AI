@@ -19,10 +19,20 @@ chrome.runtime.onInstalled.addListener(() => {
   syncActionBehavior();
 });
 
-chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: (response?: any) => void) => {
+chrome.runtime.onMessage.addListener((message: any, sender: any, sendResponse: (response?: any) => void) => {
   if (message?.type === MESSAGE_TYPES.SAVE_PAGE_CONTEXT) {
     void (async () => {
       await storageService.savePageContent(message.payload.url, message.payload);
+
+      const tabId = sender?.tab?.id;
+      if (typeof tabId === 'number') {
+        await chrome.sidePanel.setOptions({
+          tabId,
+          path: 'sidepanel.html',
+          enabled: true
+        });
+      }
+
       const storage = await storageService.getAll();
       const matchedRule = routingEngine.match(storage.siteConfigs, message.payload as PageContent);
       sendResponse({ ok: true, matchedRule });
@@ -96,22 +106,32 @@ chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: 
     return true;
   }
 
-
   if (message?.type === MESSAGE_TYPES.OPEN_SIDE_PANEL) {
     void (async () => {
-      const tabId = _sender?.tab?.id ?? message.tabId;
-      if (typeof tabId !== 'number') {
-        sendResponse({ ok: false, error: 'No active tab available.' });
+      const tabId = sender?.tab?.id ?? message.tabId;
+      const windowId = sender?.tab?.windowId ?? message.windowId;
+
+      if (typeof tabId === 'number') {
+        await chrome.sidePanel.setOptions({
+          tabId,
+          path: 'sidepanel.html',
+          enabled: true
+        });
+      }
+
+      if (typeof windowId === 'number') {
+        await chrome.sidePanel.open({ windowId });
+        sendResponse({ ok: true });
         return;
       }
 
-      await chrome.sidePanel.setOptions({
-        tabId,
-        path: 'sidepanel.html',
-        enabled: true
-      });
-      await chrome.sidePanel.open({ tabId });
-      sendResponse({ ok: true });
+      if (typeof tabId === 'number') {
+        await chrome.sidePanel.open({ tabId });
+        sendResponse({ ok: true });
+        return;
+      }
+
+      sendResponse({ ok: false, error: 'No active tab available.' });
     })();
     return true;
   }
