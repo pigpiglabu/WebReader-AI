@@ -1,12 +1,15 @@
-import { MESSAGE_TYPES } from '../shared/constants';
-import { logger } from '../shared/utils/logger';
 import { runAutoActions } from './automation/autoActions';
 import { expandCollapsedContent } from './extraction/preprocessor';
 import { parseReadableContent } from './extraction/readabilityParser';
 import { mountFloatingButton } from './ui/floatingButton';
 
+const CONTENT_MESSAGE_TYPES = {
+  openSidePanel: 'OPEN_SIDE_PANEL',
+  savePageContext: 'SAVE_PAGE_CONTEXT'
+} as const;
+
 const floatingButton = mountFloatingButton(() => {
-  void chrome.runtime.sendMessage({ type: MESSAGE_TYPES.OPEN_SIDE_PANEL });
+  void chrome.runtime.sendMessage({ type: CONTENT_MESSAGE_TYPES.openSidePanel });
 });
 
 const syncFloatingButtonPreference = async () => {
@@ -25,14 +28,14 @@ const bootstrap = async () => {
   await syncFloatingButtonPreference();
   await expandCollapsedContent();
   const pageContent = parseReadableContent();
-  const response = await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.SAVE_PAGE_CONTEXT, payload: pageContent });
+  const response = await chrome.runtime.sendMessage({ type: CONTENT_MESSAGE_TYPES.savePageContext, payload: pageContent });
 
   if (response?.matchedRule?.autoActions) {
     await runAutoActions(response.matchedRule.autoActions);
   }
 
   floatingButton.setActive(false);
-  logger.info('content', 'page context synced', { url: pageContent.url });
+  console.info('[content] page context synced', { url: pageContent.url });
 };
 
 void bootstrap();
