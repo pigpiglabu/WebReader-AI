@@ -13,7 +13,7 @@ type TabKey = typeof TABS[number];
 export function App() {
   const [activeTab, setActiveTab] = useState<TabKey>('dashboard');
   const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
-  const { models, draft, setDraft, saveModel, editModel } = useModelConfig();
+  const { models, draft, setDraft, saveModel, editModel, testModel, testState } = useModelConfig();
   const { roles, draft: roleDraft, setDraft: setRoleDraft, saveRole } = useRoleConfig();
   const { siteConfigs, draft: siteDraft, setDraft: setSiteDraft, saveRule } = useSiteRules();
 
@@ -64,7 +64,7 @@ export function App() {
 
         {activeTab === 'models' && (
           <div className="wr-grid wr-grid--two">
-            <ModelForm draft={draft} providers={['OpenAI', 'Qwen', 'Anthropic', 'Ollama', 'Custom']} onChange={setDraft} onSave={saveModel} />
+            <ModelForm draft={draft} providers={['OpenAI', 'Qwen', 'Anthropic', 'Ollama', 'Custom']} onChange={setDraft} onSave={saveModel} onTest={testModel} testState={testState} />
             <ModelList models={models} onEdit={editModel} />
           </div>
         )}

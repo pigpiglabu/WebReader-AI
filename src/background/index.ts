@@ -6,11 +6,17 @@ import { chatManager } from './modules/chatManager';
 import { routingEngine } from './modules/routingEngine';
 import { storageService } from './services/storageService';
 
+const syncActionBehavior = () => {
+  if (chrome.sidePanel?.setPanelBehavior) {
+    void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: false });
+  }
+};
+
+syncActionBehavior();
+
 chrome.runtime.onInstalled.addListener(() => {
   void storageService.getAll();
-  if (chrome.sidePanel?.setPanelBehavior) {
-    void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
-  }
+  syncActionBehavior();
 });
 
 chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: (response?: any) => void) => {
@@ -57,6 +63,14 @@ chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: 
       });
 
       sendResponse({ ok: true, session, messages: [userMessage, assistantMessage] });
+    })();
+    return true;
+  }
+
+  if (message?.type === MESSAGE_TYPES.TEST_MODEL) {
+    void (async () => {
+      const result = await apiGateway.testModel(message.payload);
+      sendResponse({ ok: result.ok, message: result.message });
     })();
     return true;
   }
