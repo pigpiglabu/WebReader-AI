@@ -3,9 +3,7 @@ declare module 'react' {
   export type ButtonHTMLAttributes<T> = Record<string, any>;
   export type InputHTMLAttributes<T> = Record<string, any>;
   export type TextareaHTMLAttributes<T> = Record<string, any>;
-
   export type ChangeEvent<T = any> = { target: T & { value: string; checked?: boolean; files?: FileList | null; type?: string } };
-
   export const StrictMode: any;
   export function useState<T>(initial: T): [T, (value: T | ((current: T) => T)) => void];
   export function useEffect(effect: () => void | (() => void) | Promise<void>, deps?: unknown[]): void;

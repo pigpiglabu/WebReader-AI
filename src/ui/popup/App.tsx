@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { MESSAGE_TYPES } from '../../shared/constants';
 import { Button } from '../shared/components/atoms/Button';
 import '../shared/styles/global.css';
 
@@ -77,7 +78,10 @@ export function App() {
         </label>
       </section>
       <section className="wr-grid wr-grid--two">
-        <Button onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html') })}>打开侧边栏阅读</Button>
+        <Button onClick={async () => {
+          const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
+          await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.OPEN_SIDE_PANEL, tabId: activeTab?.id });
+        }}>打开侧边栏阅读</Button>
         <Button tone="secondary" onClick={() => chrome.runtime.openOptionsPage()}>进入详细设置</Button>
       </section>
     </main>

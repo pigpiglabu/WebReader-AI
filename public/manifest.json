@@ -3,7 +3,7 @@
   "name": "WebReader AI",
   "description": "AI-assisted web reading and routing extension.",
   "version": "0.1.0",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "scripting", "sidePanel"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.bundle.js",

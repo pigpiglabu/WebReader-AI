@@ -8,6 +8,9 @@ import { storageService } from './services/storageService';
 
 chrome.runtime.onInstalled.addListener(() => {
   void storageService.getAll();
+  if (chrome.sidePanel?.setPanelBehavior) {
+    void chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+  }
 });
 
 chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: (response?: any) => void) => {
@@ -74,6 +77,26 @@ chrome.runtime.onMessage.addListener((message: any, _sender: any, sendResponse: 
         return;
       }
       await storageService.importBackup(payload);
+      sendResponse({ ok: true });
+    })();
+    return true;
+  }
+
+
+  if (message?.type === MESSAGE_TYPES.OPEN_SIDE_PANEL) {
+    void (async () => {
+      const tabId = _sender?.tab?.id ?? message.tabId;
+      if (typeof tabId !== 'number') {
+        sendResponse({ ok: false, error: 'No active tab available.' });
+        return;
+      }
+
+      await chrome.sidePanel.setOptions({
+        tabId,
+        path: 'sidepanel.html',
+        enabled: true
+      });
+      await chrome.sidePanel.open({ tabId });
       sendResponse({ ok: true });
     })();
     return true;
