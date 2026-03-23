@@ -1,0 +1,149 @@
+:root {
+  color-scheme: light;
+  font-family: 'Segoe UI', Roboto, Helvetica Neue, sans-serif;
+  color: #1a1a1a;
+  background: #f3f6fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7faff 0%, #eef3fb 100%);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.wr-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.wr-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(129, 62, 251, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(31, 41, 55, 0.08);
+  padding: 16px;
+}
+
+.wr-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.wr-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wr-button {
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  padding: 10px 14px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.wr-button:hover {
+  transform: translateY(-1px);
+}
+
+.wr-button--primary {
+  background: linear-gradient(135deg, #0078d4, #813efb);
+  color: #fff;
+}
+
+.wr-button--secondary {
+  background: #edf2ff;
+  color: #223;
+}
+
+.wr-button--danger {
+  background: #d83b01;
+  color: #fff;
+}
+
+.wr-input {
+  width: 100%;
+  border: 1px solid #d8def0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.wr-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.wr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wr-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px;
+  background: #fff;
+}
+
+.wr-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  padding: 4px 8px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.wr-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.wr-nav {
+  background: #111827;
+  color: #f9fafb;
+  padding: 24px 16px;
+}
+
+.wr-nav button {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.wr-content {
+  padding: 24px;
+}
+
+.wr-message {
+  padding: 12px;
+  border-radius: 14px;
+  max-width: 90%;
+}
+
+.wr-message--user {
+  margin-left: auto;
+  background: #dbeafe;
+}
+
+.wr-message--assistant {
+  background: #fff;
+}
